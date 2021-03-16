@@ -10,3 +10,7 @@ _Don't take this 👆 too much seriously_
 2. Install dependencies
 3. Copy the `.env.example` to `.env` and fill the `APP_KEY` value. If you want to customize another value feel free.
 4. `npm run start` 🎉
+
+## API REST
+
+You can find Swagger documentation in `http://localhost:3333/docs` (or in the port you configured)
