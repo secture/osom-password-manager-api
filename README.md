@@ -8,5 +8,5 @@ _Don't take this 👆 too much seriously_
 
 1. Clone this repo.
 2. Install dependencies
-3. Copy the `.env.dist` to `.env` and fill the `APP_KEY` value. If you want to customize another value feel free.
+3. Copy the `.env.example` to `.env` and fill the `APP_KEY` value. If you want to customize another value feel free.
 4. `npm run start` 🎉
