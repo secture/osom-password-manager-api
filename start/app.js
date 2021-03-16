@@ -14,7 +14,8 @@ const providers = [
   '@adonisjs/framework/providers/AppProvider',
   '@adonisjs/bodyparser/providers/BodyParserProvider',
   '@adonisjs/cors/providers/CorsProvider',
-  '@adonisjs/lucid/providers/LucidProvider'
+  '@adonisjs/lucid/providers/LucidProvider',
+  'adonis-swagger/providers/SwaggerProvider'
 ]
 
 /*
