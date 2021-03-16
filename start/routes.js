@@ -17,4 +17,5 @@
 const Route = use('Route')
 
 Route.get('/passwords', 'PasswordController.list')
+Route.post('/passwords', 'PasswordController.create')
 Route.get('/passwords/:id', 'PasswordController.detail')
