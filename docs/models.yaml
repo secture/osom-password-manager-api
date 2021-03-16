@@ -1,0 +1,39 @@
+definitions:
+  Password:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      username:
+        type: string
+      password:
+        type: string
+      created_at:
+        type: string
+        format: date
+      updated_at:
+        type: string
+        format: date
+  CreatePasswordRequest:
+    type: object
+    properties:
+      name:
+        required: true
+        type: string
+      username:
+        required: true
+        type: string
+      password:
+        required: true
+        type: string
+  UpdatePasswordRequest:
+    type: object
+    properties:
+      name:
+        type: string
+      username:
+        type: string
+      password:
+        type: string
