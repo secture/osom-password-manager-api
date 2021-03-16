@@ -17,6 +17,13 @@ class PasswordController {
 
     response.status(201).json(await Password.create(passwordData))
   }
+
+  async delete({ params: { id } }) {
+    await Password.find(id)
+      .then((password) => password.delete())
+
+    return null
+  }
 }
 
 module.exports = PasswordController

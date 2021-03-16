@@ -3,7 +3,9 @@
 const { test, trait } = use('Test/Suite')('PasswordController')
 /** @type { typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 /** @type {import('@adonisjs/lucid/src/Factory')} */
+/** @type {import('../../app/Models/Password')} */
 const Factory = use('Factory')
+const Password = use('App/Models/Password')
 
 trait('Test/ApiClient')
 
@@ -36,4 +38,15 @@ test('it creates new password', async ({ client, assert }) => {
   assert.equal(response.body.name, password.name)
   assert.equal(response.body.username, password.username)
   assert.equal(response.body.password, password.password)
+})
+
+test('it deletes existing password', async ({ client, assert }) => {
+  let password = await Factory.model('App/Models/Password').create();
+
+  const response = await client.delete(`/passwords/${password.id}`).end()
+
+  response.assertStatus(204);
+
+  const result = await Password.find(password.id)
+  assert.isNull(result)
 })
