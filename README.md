@@ -1,28 +1,12 @@
-# Adonis API application
+# Awesome Password Manager API
 
-This is the boilerplate for creating an API server in AdonisJs, it comes pre-configured with.
+This project is our API for our passwords management system.
 
-1. Bodyparser
-2. Authentication
-3. CORS
-4. Lucid ORM
-5. Migrations and seeds
+_Don't take this 👆 too much seriously_ 
 
 ## Setup
 
-Use the adonis command to install the blueprint
-
-```bash
-adonis new yardstick --api-only
-```
-
-or manually clone the repo and then run `npm install`.
-
-
-### Migrations
-
-Run the following command to run startup migrations.
-
-```js
-adonis migration:run
-```
+1. Clone this repo.
+2. Install dependencies
+3. Copy the `.env.dist` to `.env` and fill the `APP_KEY` value. If you want to customize another value feel free.
+4. `npm run start` 🎉
