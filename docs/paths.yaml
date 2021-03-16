@@ -1,0 +1,58 @@
+paths:
+  /passwords:
+    get:
+      tags: [passwords]
+      summary: Returns all stored passwords
+      responses:
+        200:
+          description: All passwrods
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Password'
+    post:
+      tags: [passwords]
+      summary: Creates new password
+      parameters:
+        - in: body
+          name: passwordData
+          schema:
+            $ref: '#/definitions/CreatePasswordRequest'
+      responses:
+        201:
+          description: Password created successfully
+          schema:
+            $ref: '#/definitions/Password'
+  /passwords/{id}:
+    parameters:
+      - in: path
+        name: id
+        description: Password ID
+        required: true
+    get:
+      tags: [ passwords ]
+      description: Returns password with given ID
+      responses:
+        200:
+          description: Password found
+          schema:
+            $ref: '#/definitions/Password'
+    put:
+      tags: [ passwords ]
+      description: Modifies password with given data
+      parameters:
+        - in: body
+          name: passwordData
+          schema:
+            $ref: '#/definitions/UpdatePasswordRequest'
+      responses:
+        200:
+          description: Modified password
+          schema:
+            $ref: '#/definitions/Password'
+    delete:
+      tags: [ passwords ]
+      description: Deletes password with given ID
+      responses:
+        204:
+          description: Password was deleted successfuly
