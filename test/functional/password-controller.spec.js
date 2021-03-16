@@ -50,3 +50,20 @@ test('it deletes existing password', async ({ client, assert }) => {
   const result = await Password.find(password.id)
   assert.isNull(result)
 })
+
+test('it allows to edit existing password', async ({ client, assert }) => {
+  let password = await Factory.model('App/Models/Password').create();
+  const newData = { name: 'New name', password: 'New password', username: 'New username' }
+
+  const response = await client.put(`/passwords/${password.id}`).send(newData).end()
+
+  response.assertStatus(200);
+  assert.equal(response.body.name, newData.name)
+  assert.equal(response.body.username, newData.username)
+  assert.equal(response.body.password, newData.password)
+
+  const storedPassword = await Password.find(password.id)
+  assert.equal(storedPassword.name, newData.name)
+  assert.equal(storedPassword.username, newData.username)
+  assert.equal(storedPassword.password, newData.password)
+})

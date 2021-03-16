@@ -24,6 +24,16 @@ class PasswordController {
 
     return null
   }
+
+  async edit({ params: { id }, request }) {
+    const passwordData = request.only(['name', 'username', 'password'])
+    const password = await Password.find(id)
+    password.merge(passwordData)
+
+    await password.save()
+
+    return password
+  }
 }
 
 module.exports = PasswordController
