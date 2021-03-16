@@ -17,3 +17,4 @@
 const Route = use('Route')
 
 Route.get('/passwords', 'PasswordController.list')
+Route.get('/passwords/:id', 'PasswordController.detail')

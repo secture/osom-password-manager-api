@@ -15,3 +15,12 @@ test('it returns list of passwords', async ({ client }) => {
   response.assertStatus(200);
   response.assertJSONSubset([product.toJSON()])
 })
+
+test('it returns password detail', async ({ client }) => {
+  let product = await Factory.model('App/Models/Password').create({ id: 15 });
+
+  const response = await client.get('/passwords/15').end()
+
+  response.assertStatus(200);
+  response.assertJSON(product.toJSON())
+})
