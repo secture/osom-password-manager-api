@@ -3,6 +3,7 @@
 const { test, trait } = use('Test/Suite')('Password GraphQL')
 /** @type {import('../../app/Models/Password')} */
 const Factory = use('Factory')
+const Password = use('App/Models/Password')
 
 trait('Test/ApiClient')
 
@@ -102,4 +103,23 @@ test('it creates new password', async ({ client, assert }) => {
   assert.equal(newPassword.name, password.name)
   assert.equal(newPassword.username, password.username)
   assert.equal(newPassword.password, password.password)
+})
+
+test('it deletes existing password', async ({ client, assert }) => {
+  let password = await Factory.model('App/Models/Password').create();
+
+  let query = `
+  mutation DeletePassword($id: Int!) {
+    deletePassword(id: $id)
+  }
+`;
+
+  const { response, body: { data } } = await makeGraphQLCall(client, query, {
+    id: password.id
+  })
+  response.assertStatus(200);
+
+  const result = await Password.find(password.id)
+  assert.isNull(data.deletePassword)
+  assert.isNull(result)
 })

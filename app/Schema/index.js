@@ -3,8 +3,11 @@
 const { makeExecutableSchema } = require('graphql-tools')
 /** @type {import('../../app/Models/Password')} */
 const Password = use('App/Models/Password')
+const { Void } = require('./scalars')
 
 const typeDefs = `
+  scalar Void
+
   type Password {
     id: Int!
     name: String!
@@ -27,10 +30,13 @@ const typeDefs = `
 
   type Mutation {
     createPassword(password: CreatePasswordInput!): Password!
+    deletePassword(id: Int!): Void
   }
 `
 
 const resolvers = {
+  Void,
+
   Query: {
     async allPasswords() {
       return Password.all()
@@ -47,6 +53,12 @@ const resolvers = {
     async createPassword(_, { password }) {
       return Password.create(password)
         .then((createdPassword) => createdPassword.toJSON());
+    },
+
+    async deletePassword(_, { id }) {
+      return Password.find(id)
+        .then((password) => password.delete())
+        .then(() => null)
     }
   }
 }
