@@ -32,5 +32,5 @@ Route.route('/gql', ({ request, auth, response }) => {
 }, ['GET', 'POST'])
 
 Route.route('/graphiql', ({ request, response }) => {
-  return GraphqlAdonis.graphiql({ endpoint: '/gql'}, request, response)
+  return GraphqlAdonis.graphiql({ endpointURL: '/gql'}, request, response)
 })
