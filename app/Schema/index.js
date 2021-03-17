@@ -22,6 +22,7 @@ const typeDefs = `
 
   type Query {
     allPasswords: [Password]
+    password(id: Int!): Password
   }
 
   type Mutation {
@@ -32,8 +33,13 @@ const typeDefs = `
 const resolvers = {
   Query: {
     async allPasswords() {
-      const passwords = await Password.all()
-      return passwords.toJSON()
+      return Password.all()
+        .then((passwords) => passwords.toJSON())
+    },
+
+    async password(_, { id }) {
+      return Password.find(id)
+        .then((password) => password.toJSON())
     }
   },
 

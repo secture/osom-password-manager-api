@@ -50,6 +50,33 @@ test('it returns list of passwords', async ({ client, assert }) => {
   assert.deepInclude(body.data.allPasswords, product.toJSON())
 })
 
+test('it returns password detail', async ({ client, assert }) => {
+  let password = await Factory.model('App/Models/Password').create({ id: 10 });
+
+  let query = `
+  query GetPassword($id: Int!) {
+    password(id: $id) {
+      id
+      name
+      username
+      password
+      created_at
+      updated_at
+    }
+  }
+`
+
+  const { response, body: { data: { password: returnedPassword} } } = await makeGraphQLCall(
+    client,
+    query,
+    { id: 10 }
+  )
+
+
+  response.assertStatus(200);
+  assert.deepEqual(returnedPassword, password.toJSON())
+})
+
 test('it creates new password', async ({ client, assert }) => {
   let password = await Factory.model('App/Models/Password').make();
   password = password.toJSON()
