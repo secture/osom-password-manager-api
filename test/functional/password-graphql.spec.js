@@ -123,3 +123,34 @@ test('it deletes existing password', async ({ client, assert }) => {
   assert.isNull(data.deletePassword)
   assert.isNull(result)
 })
+
+test('it allows to edit existing password', async ({ client, assert }) => {
+  let password = await Factory.model('App/Models/Password').create();
+  const newData = { name: 'New name', password: 'New password', username: 'New username' }
+
+  let query = `
+  mutation UpdatePassword($id: Int!, $input: UpdatePasswordInput!) {
+    updatePassword(id: $id, passwordInput: $input) {
+      id
+      name
+      username
+      password
+    }
+  }
+`;
+
+  const { response, body: { data: { updatePassword: updatedPassword } } } = await makeGraphQLCall(client, query, {
+    id: password.id,
+    input: newData
+  })
+
+  response.assertStatus(200);
+  assert.equal(updatedPassword.name, newData.name)
+  assert.equal(updatedPassword.username, newData.username)
+  assert.equal(updatedPassword.password, newData.password)
+
+  const storedPassword = await Password.find(password.id)
+  assert.equal(storedPassword.name, newData.name)
+  assert.equal(storedPassword.username, newData.username)
+  assert.equal(storedPassword.password, newData.password)
+})

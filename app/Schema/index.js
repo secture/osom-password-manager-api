@@ -23,6 +23,12 @@ const typeDefs = `
     password: String!
   }
 
+  input UpdatePasswordInput {
+    name: String
+    username: String
+    password: String
+  }
+
   type Query {
     allPasswords: [Password]
     password(id: Int!): Password
@@ -30,6 +36,7 @@ const typeDefs = `
 
   type Mutation {
     createPassword(password: CreatePasswordInput!): Password!
+    updatePassword(id: Int!, passwordInput: UpdatePasswordInput!): Password!
     deletePassword(id: Int!): Void
   }
 `
@@ -59,6 +66,15 @@ const resolvers = {
       return Password.find(id)
         .then((password) => password.delete())
         .then(() => null)
+    },
+
+    async updatePassword(_, { id, passwordInput }) {
+      return Password.find(id)
+        .then((password) => {
+          password.merge(passwordInput)
+          return password.save()
+            .then(() => password.toJSON())
+        });
     }
   }
 }
