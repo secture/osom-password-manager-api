@@ -6,10 +6,24 @@ const Factory = use('Factory')
 
 trait('Test/ApiClient')
 
-async function makeGraphQLCall(client, query) {
-  return await client.post('/gql')
-    .send({query: query})
+async function makeGraphQLCall(client, query, variables) {
+  function isError(response) {
+    return !(200 <= response.status && response.status <= 299);
+  }
+
+  let graphQLRequest = { query: query };
+  if (undefined !== variables) {
+    graphQLRequest.variables = variables;
+  }
+
+  const response = await client.post('/gql')
+    .send(graphQLRequest)
     .end();
+
+  return {
+    response,
+    body: !isError(response) ? JSON.parse(response.text) : response.text
+  }
 }
 
 test('it returns list of passwords', async ({ client, assert }) => {
@@ -28,12 +42,37 @@ test('it returns list of passwords', async ({ client, assert }) => {
   }
 `;
 
-  const response = await makeGraphQLCall(client, query)
+  const { response, body } = await makeGraphQLCall(client, query)
 
   response.assertStatus(200);
 
-  const body = JSON.parse(response.text)
-
   assert.isDefined(body.data)
   assert.deepInclude(body.data.allPasswords, product.toJSON())
+})
+
+test('it creates new password', async ({ client, assert }) => {
+  let password = await Factory.model('App/Models/Password').make();
+  password = password.toJSON()
+
+  let query = `
+  mutation CreatePassword($newPassword: CreatePasswordInput!) {
+    createPassword(password: $newPassword) {
+      id
+      name
+      username
+      password
+    }
+  }
+`;
+
+  const { response, body: { data: { createPassword: newPassword} } } = await makeGraphQLCall(client, query, {
+    newPassword: password
+  })
+
+
+  response.assertStatus(200);
+  assert.isDefined(newPassword.id)
+  assert.equal(newPassword.name, password.name)
+  assert.equal(newPassword.username, password.username)
+  assert.equal(newPassword.password, password.password)
 })
